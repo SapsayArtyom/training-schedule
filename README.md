@@ -1,1 +1,1 @@
-# website of firedup games
+# training schedule app

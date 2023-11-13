@@ -6,8 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --env mode=production",
-    "start": "webpack serve --env port=3001 --env mode=development"
+    "start": "webpack serve --env port=3001 --env mode=development",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
+  "homepage": "https:///SapsayArtyom/training-schedule",
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -30,6 +33,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-react": "^7.32.2",
     "file-loader": "^6.2.0",
+    "gh-pages": "^6.0.0",
     "html-webpack-plugin": "^5.5.1",
     "mini-css-extract-plugin": "^2.7.5",
     "postcss": "^8.4.31",
