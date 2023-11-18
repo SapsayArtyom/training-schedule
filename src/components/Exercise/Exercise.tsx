@@ -5,23 +5,25 @@ import { getDatabase, ref, set, onValue, push } from "firebase/database";
 import { db } from '../../helpers/firebase';
 import Button, { ThemeButton } from '../ui/Button/Button';
 import TextArea from '../ui/TextArea/TextArea';
+import { Link } from 'react-router-dom';
  
 interface ExerciseProps {
     className?: string
     name: string
+    link: string
     exercises: string
     dataExercises: any
     day: string
     week: number
     repeat?: number
+    data: any
 }
  
-const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises, day, week, repeat }) => {
+const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises, day, week, repeat, data, link }) => {
 
     const schedule: ISchedule[] = config;
     const [text, setText] = useState<string>('');
     const [lap, setLap] = useState<number>(0);
-    // console.log('0000', week, name, dataExercises);
 
     const inputHandler = (val: string) => {
         let newVal = val;
@@ -37,17 +39,39 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
         set(ref(db, `/exercises/${settings.programmId}/${day}/${name}/repeat/${week}`), count.toString())
     }
 
-    useEffect(() => {
-        if (dataExercises) setLap(+dataExercises?.repeat[week]);
-    }, [dataExercises, week])
-    
-    useEffect(() => {
-        if (dataExercises) setText(dataExercises?.weight[week]);
-    }, [dataExercises, week])
-    
     // useEffect(() => {
-    //     setLap(0);
-    // }, [week])
+    //     if (dataExercises) setLap(+dataExercises?.repeat[week]);
+    // }, [dataExercises, week])
+    
+    useEffect(() => {
+        if (dataExercises) {
+            setText(dataExercises?.weight[week]);
+            setLap(+dataExercises?.repeat[week]);
+        };
+    }, [dataExercises, week])
+
+    const getRepeatExercise = (name: string): string => {
+        const currentIndex = schedule.findIndex(el => el.day === day);
+        let currentData = null
+        schedule.forEach((el, index) => {
+            if (el.day !== day) {
+                const check = el.exercises.find(item => item.name === name);
+                if(check) {
+                    currentData = currentIndex < index ? data[el.day][name].weight[week - 1] : data[el.day][name].weight[week]
+                }
+            }
+        })
+
+        return currentData;
+    }
+
+    const getExerciseData = (): string => {
+        let currentData = null
+        currentData = getRepeatExercise(name);
+        if (!currentData) currentData = data[day][name].weight[week - 1];
+        
+        return currentData;
+    }
 
     // useEffect(() => {
     //     // set(ref(db, `/exercises/${day}/${name}/repeat`), {
@@ -61,12 +85,13 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     //         // set(ref(db, `/exercises/comments/${day}/${index}`), '')
     //     }
     // }, [day])
-
+    
     return (    
         <div className=' px-[25px] py-[20px] border-[#672E5A] border-solid border-b-[1px]'>
             <div className='flex justify-between w-[100%] '>
                 <div className='flex flex-col flex-1 pr-[20px] max-w-[190px] border-[#672E5A] border-solid border-b-[1px]'>
-                    <p className='text-[20px]'>{ name }</p>
+                    {/* <p className='text-[20px]'>{ name }</p> */}
+                    <Link to={link} target='_blank' className='text-[20px]'>{ name }</Link>
                     <div>
                         <p>{ exercises }</p>
                     </div>
@@ -74,13 +99,13 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
                 { name !== 'Пресс' ? <div className='flex flex-col pr-[20px] justify-start items-center'>
                     <div className='w-[55px]'>
                         <Input
-                            value={text}
+                            value={text || ' '}
                             onChange={inputHandler}
                             className='text-[#fff] bg-[#d3d3d33d] border-[1px] border-[#89878F] text-center !h-[25px]'
                         />
                     </div>
                     <div className='mt-[5px]'>
-                        <p>{ dataExercises?.weight[week-1] ? dataExercises?.weight[week-1] : '0' }</p>
+                        <p>{ dataExercises ? getExerciseData() : '0' }</p>
                     </div>
                 </div> : null
                 }

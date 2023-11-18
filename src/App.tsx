@@ -4,6 +4,7 @@ import './index.css'
 import { classNames } from './helpers/classNames'
 import AppRouter from './components/AppRouter'
 import Navbar from './components/navbar/Navbar'
+import { HomePageAsync } from './pages/HomePage/HomePage.async'
 
 function App () {
     
