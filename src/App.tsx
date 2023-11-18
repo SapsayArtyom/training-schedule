@@ -12,7 +12,8 @@ function App () {
         <div className={classNames('app', {}, ['flex', 'justify-center' ,'items-center', 'flex-col'])}>
             {/* <Navbar /> */}
             <div className='layout'>
-                <AppRouter />
+                <HomePageAsync />
+                {/* <AppRouter /> */}
             </div>
         </div>
     )

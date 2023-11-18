@@ -90,14 +90,15 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }, [])    
 
     const getCurrentDay = (day: number) => {
+        
         switch (true) {
-            case (day === 0 || day > 4) :
+            case (day === 0) :
                 return 0
                 break;
             case day <= 2 :
                 return 1
                 break;
-            case day <= 4 :
+            case day > 2 :
                 return 2
                 break;
         
