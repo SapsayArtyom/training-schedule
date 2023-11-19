@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import { IDay, ISchedule, config, settings } from '../../configs/config';
 import Input from '../ui/Input/Input';
 import { getDatabase, ref, set, onValue, push } from "firebase/database";
@@ -46,7 +46,7 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     useEffect(() => {
         if (dataExercises) {
             setText(dataExercises?.weight[week]);
-            setLap(+dataExercises?.repeat[week]);
+            setLap(+dataExercises?.repeat[week] || 0);
         };
     }, [dataExercises, week])
 
@@ -122,4 +122,4 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     )
 }
  
-export default Exercise
+export default memo(Exercise)

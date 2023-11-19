@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useCallback, useEffect, useMemo, useState } from 'react'
 import cls from './MainBlock.module.scss'
 import { classNames } from '../../helpers/classNames'
 import Button, { ThemeButton } from '../ui/Button/Button'
@@ -12,6 +12,8 @@ import { db } from '../../helpers/firebase'
 // import { getDatabase, ref, onValue } from "firebase/database";
 import { getDatabase, ref, child, get, onValue, set  } from "firebase/database";
 import TextArea from '../ui/TextArea/TextArea'
+import ProgressBar from '../progressBar/ProgressBar'
+import { current } from '@reduxjs/toolkit'
  
 interface MainBlockProps {
     className?: string
@@ -20,6 +22,7 @@ interface MainBlockProps {
 const MainBlock: FC<MainBlockProps> = ({ className }) => {
     const [day, setDay] = useState<number>(0);
     const [week, setWeek] = useState<number>(0);
+    const [totalRepeat, setTotalRepeat] = useState<number>(0);
     const [dataExercises, setDataExercises] = useState<any>(null);
     const [dataComments, setDataComments] = useState<any>(null);
 
@@ -109,9 +112,10 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }
     
     const getExerciseName = (arr: IDay[]) => {
-        return arr.map((el, index) => {
+        let count = 0;
+        const arrEx = arr.map((el, index) => {
             const repeat = el.weeks[week].split('')[0];
-            
+            count += Number(repeat);
             return <Exercise 
                 key={index}
                 name={el.name}
@@ -124,10 +128,13 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
                 data={dataExercises}
             />
         })
+        // setTotalRepeat(count);
+
+        return arrEx;
     }
     
     const getDay = (id: number) => {
-        const el = schedule[id]
+        const el = schedule[id];
         return <div className='flex flex-col h-[100%] justify-start mt-[100px]'>
                     <p className='mb-[10px] text-[26px] bg-[#672E5A] py-[10px] text-center'>{el.day}</p>
                     <div className='flex flex-col'>
@@ -143,12 +150,28 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         set(ref(db, `/comments/${settings.programmId}/${days[day].label}/${week}`), newVal);
     }
 
-    const getExerciseData = () => {
+    const getProgress = (arr: IDay[]): number => {
+        let count = 0;
+        let progress = 0;
+        const arrEx = arr.map((el) => {
+            const repeat = el.weeks[week].split('')[0];
+            count += Number(repeat);
+        })
+        const currentExercises = dataExercises?.[days[day].label];
+        let currentCount = 0;
+        if (currentExercises) {
+            Object.values(currentExercises).forEach((el: any) => currentCount += Number(el.repeat[week] || 0))
+            const cof = 100 / count;
+            progress = currentCount * cof;
+        }
 
+        console.log('progress ::', progress);
+        
+        return progress;
     }
 
     return (
-        <div className='flex flex-col flex-1 relative'>
+        <div className='flex flex-col flex-1 relative w-[100%]'>
             <div className='flex justify-end fixed top-0 bg-[#0a080d] pt-[30px] pb-[10px] w-[100%]'>
                 <Dropdown 
                     value={day.toString()}
@@ -167,13 +190,16 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
             {
                 getDay(day)
             }
-            <div className='pb-[20px] pt-[10px]'>
+            <div className='pb-[70px] pt-[10px] px-[13px]'>
                 <p className='text-[14px]'>Comment:</p>
                 <TextArea 
                     value={dataComments?.[week] ? dataComments[week] : ''}
                     className='bg-[#d3d3d33d] border-[1px] border-[#89878F]'
                     onChange={textAreaHandler}
                 />
+            </div>
+            <div className='fixed bottom-0 w-[100%] p-[13px] bg-[#0a080d]'>
+                <ProgressBar progress={getProgress(schedule[day].exercises)} />
             </div>
         </div>
     )
