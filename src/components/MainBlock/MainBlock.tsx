@@ -75,8 +75,6 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
 
     useEffect(() => {
         let diff = (settings.startProgramm - Date.now()) / 1000;
-        let bb = (settings.startProgramm - Date.now()) / 1000;
-        const сс = bb / (60 * 60 * 24) % 7;
         let diffWeek = diff / (60 * 60 * 24 * 7);
         let diffDay = diff / (60 * 60 * 24) % 7;
         diffWeek = Math.abs(Math.ceil(diffWeek));
@@ -153,7 +151,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     const getProgress = (arr: IDay[]): number => {
         let count = 0;
         let progress = 0;
-        const arrEx = arr.map((el) => {
+        arr.forEach((el) => {
             const repeat = el.weeks[week].split('')[0];
             count += Number(repeat);
         })
@@ -162,10 +160,8 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         if (currentExercises) {
             Object.values(currentExercises).forEach((el: any) => currentCount += Number(el.repeat[week] || 0))
             const cof = 100 / count;
-            progress = currentCount * cof;
+            progress = Math.round(currentCount * cof);
         }
-
-        console.log('progress ::', progress);
         
         return progress;
     }

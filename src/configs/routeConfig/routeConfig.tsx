@@ -1,6 +1,6 @@
 import { RouteProps } from "react-router-dom"
 import NotFoundPage from "../../pages/NotFoundPage/NotFoundPage"
-import { AboutPageAsync } from "../../pages/AboutPage/AboutPage.async"
+// import { AboutPageAsync } from "../../pages/AboutPage/AboutPage.async"
 import { HomePageAsync } from "../../pages/HomePage/HomePage.async"
 
 export enum AppRoutes {
