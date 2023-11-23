@@ -15,7 +15,7 @@ function App () {
     return (
         <div className={classNames('app', {}, ['flex', 'justify-center' ,'items-center', 'flex-col'])}>
             {/* <Navbar /> */}
-            <div className='w-[100%] flex justify-start p-[13px] absolute z-10 top-0'>
+            <div className='flex justify-start p-[13px] absolute z-10 top-0 left-0'>
                 <Hamburger onClick={() => setOpen(!isOpen)} />
             </div>
             <div className='layout'>

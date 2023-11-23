@@ -79,8 +79,9 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         let diffDay = diff / (60 * 60 * 24) % 7;
         diffWeek = Math.abs(Math.ceil(diffWeek));
         diffDay = Math.abs(Math.ceil(diffDay));
-        const current = diffWeek > 7 ? 0 : diffWeek;
+        const current = diffWeek > settings.durationProgramm ? 0 : diffWeek;
         const currentDay = diffDay > 6 ? 0 : getCurrentDay(diffDay);
+        
         setWeek(current);
         setDay(currentDay);
         
