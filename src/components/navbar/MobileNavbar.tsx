@@ -5,13 +5,14 @@ import Links from './Links'
  
 interface MobileNavbarProps {
     className?: string
+    onClick?: () => void 
 }
  
-const MobileNavbar: FC<MobileNavbarProps> = ({ className }) => {
+const MobileNavbar: FC<MobileNavbarProps> = ({ className, onClick }) => {
  
     return (
         <div className={classNames(cls.MobileNavbar, {}, [''])}>
-            <Links />
+            <Links onClick={onClick} />
             <p className='text-orange text-xl text-center mt-[70px]'>We are Fire</p>
         </div>
     )

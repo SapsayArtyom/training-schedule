@@ -1,19 +1,11 @@
-import { FC, useCallback, useEffect, useMemo, useState } from 'react'
-import cls from './MainBlock.module.scss'
-import { classNames } from '../../helpers/classNames'
-import Button, { ThemeButton } from '../ui/Button/Button'
-import logo from '../../assets/images/logo.png'
-import { useNavigate } from 'react-router-dom'
+import { FC, useEffect, useMemo, useState } from 'react'
 import { IDay, ISchedule, config, settings } from '../../configs/config'
 import Dropdown from '../ui/Dropdown/Dropdown'
-import Input from '../ui/Input/Input'
 import Exercise from '../Exercise/Exercise'
 import { db } from '../../helpers/firebase'
-// import { getDatabase, ref, onValue } from "firebase/database";
 import { getDatabase, ref, child, get, onValue, set  } from "firebase/database";
 import TextArea from '../ui/TextArea/TextArea'
 import ProgressBar from '../progressBar/ProgressBar'
-import { current } from '@reduxjs/toolkit'
  
 interface MainBlockProps {
     className?: string
@@ -22,7 +14,6 @@ interface MainBlockProps {
 const MainBlock: FC<MainBlockProps> = ({ className }) => {
     const [day, setDay] = useState<number>(0);
     const [week, setWeek] = useState<number>(0);
-    const [totalRepeat, setTotalRepeat] = useState<number>(0);
     const [dataExercises, setDataExercises] = useState<any>(null);
     const [dataComments, setDataComments] = useState<any>(null);
 
@@ -45,20 +36,6 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }, [schedule])
 
     useEffect(() => {
-        // const dbRef = ref(db);
-        // get(child(dbRef, `/exercises`)).then((snapshot) => {
-        //   if (snapshot.exists()) {
-        //     const data = snapshot.val();
-        //     setDataExercises(data[days[day].label])
-        //     console.log('data ::', data);
-        //     // const dataDay = data[days[day].label];
-        //   } else {
-        //     console.log("No data available");
-        //   }
-        // }).catch((error) => {
-        //   console.error(error);
-        // });
-
         const starCountRef = ref(db, `/exercises/${settings.programmId}`);
         onValue(starCountRef, (snapshot) => {
             const data = snapshot.val();
@@ -79,7 +56,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         let diffDay = diff / (60 * 60 * 24) % 7;
         diffWeek = Math.abs(Math.ceil(diffWeek));
         diffDay = Math.abs(Math.ceil(diffDay));
-        const current = diffWeek > settings.durationProgramm ? 0 : diffWeek;
+        const current = diffWeek >= settings.durationProgramm ? 0 : diffWeek;
         const currentDay = diffDay > 6 ? 0 : getCurrentDay(diffDay);
         
         setWeek(current);
@@ -111,6 +88,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }
     
     const getExerciseName = (arr: IDay[]) => {
+        
         let count = 0;
         const arrEx = arr.map((el, index) => {
             const repeat = el.weeks[week].split('')[0];
@@ -127,14 +105,13 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
                 data={dataExercises}
             />
         })
-        // setTotalRepeat(count);
 
         return arrEx;
     }
     
     const getDay = (id: number) => {
         const el = schedule[id];
-        return <div className='flex flex-col h-[100%] justify-start mt-[100px]'>
+        return <div className='flex flex-col h-[100%] justify-start mt-[70px]'>
                     <p className='mb-[10px] text-[26px] bg-[#672E5A] py-[10px] text-center'>{el.day}</p>
                     <div className='flex flex-col'>
                         { getExerciseName(el.exercises) }
@@ -169,7 +146,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
 
     return (
         <div className='flex flex-col flex-1 relative w-[100%]'>
-            <div className='flex justify-end fixed top-0 bg-[#0a080d] pt-[30px] pb-[10px] w-[100%]'>
+            <div className='flex justify-end fixed top-[100px] bg-[#0a080d] pt-[10px] pb-[10px] w-[100%]'>
                 <Dropdown 
                     value={day.toString()}
                     onChange={setDay}

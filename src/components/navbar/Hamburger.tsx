@@ -11,7 +11,7 @@ interface HamburgerProps {
 const Hamburger: FC<HamburgerProps> = ({ className, onClick }) => {
 
     const [isOpen, setOpen] = useState<boolean>(false);
-
+    
     const btnHandle = () => {
         onClick();
         setOpen(!isOpen);
@@ -19,12 +19,9 @@ const Hamburger: FC<HamburgerProps> = ({ className, onClick }) => {
  
     return (
         <div onClick={() => btnHandle()} className={classNames('wrapper_menu', {['open']: isOpen}, ['md:hidden', 'flex', 'mr-[30px]'])}>
-            {/* <div className="line-menu half start"></div> */}
             <div className={classNames('line_menu', {}, ['start', 'half'])}></div>
             <div className={classNames('line_menu', {}, [])}></div>
             <div className={classNames('line_menu', {}, ['end', 'half'])}></div>
-            {/* <div className="line-menu"></div>
-            <div className="line-menu half end"></div> */}
         </div>
     )
 }

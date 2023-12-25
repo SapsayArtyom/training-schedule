@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, RefAttributes } from 'react'
+import { FC } from 'react'
 import { classNames } from '../../../helpers/classNames'
 import cls from './AppLink.module.scss'
 import { Link, LinkProps, NavLink } from 'react-router-dom'

@@ -16,12 +16,13 @@ function App () {
         <div className={classNames('app', {}, ['flex', 'justify-center' ,'items-center', 'flex-col'])}>
             {/* <Navbar /> */}
             <div className='flex justify-start p-[13px] absolute z-10 top-0 left-0'>
-                <Hamburger onClick={() => setOpen(!isOpen)} />
+                {/* <Hamburger onClick={() => setOpen(!isOpen)} /> */}
+                <Navbar />
             </div>
             <div className='layout'>
-                <HomePageAsync />
+                {/* <HomePageAsync /> */}
                 {/* <SizePageAsync /> */}
-                {/* <AppRouter /> */}
+                <AppRouter />
             </div>
         </div>
     )

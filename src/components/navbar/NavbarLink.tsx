@@ -6,13 +6,12 @@ interface NavbarLinkProps {
     className?: string
     children: ReactNode
     src?: string
+    onClick?: () => void
 }
  
-const NavbarLink: FC<NavbarLinkProps> = ({ className, children, src }) => {
- 
+const NavbarLink: FC<NavbarLinkProps> = ({ className, children, src, onClick }) => {
     return (
-        <div className={classNames(cls.NavbarLink, {}, [className])}>
-            {/* <img className={cls.img} src={src} /> */}
+        <div className={classNames(cls.NavbarLink, {}, [className])} onClick={() => onClick && onClick()}>
             {children}
         </div>
     )

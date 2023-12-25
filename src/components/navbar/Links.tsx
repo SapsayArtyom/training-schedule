@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import cls from './Navbar.module.scss'
 
 import NavbarLink from './NavbarLink'
@@ -6,23 +6,22 @@ import AppLink from '../ui/AppLink/AppLink'
  
 interface LunksProps {
     className?: string
+    onClick?: () => void
 }
  
-const Links: FC<LunksProps> = ({ className }) => {
- 
+const Links: FC<LunksProps> = ({ className, onClick }) => {
     return (
         <>
-            <NavbarLink >
-                <AppLink className={cls.active} to={'/'}>Home</AppLink>
+            <NavbarLink onClick={onClick}>
+                <AppLink  
+                    className={cls.active} 
+                    to={'/'}
+                >
+                    Home
+                </AppLink>
             </NavbarLink>
-            {/* <NavbarLink >
-                        <AppLink className={cls.active} onClick={() => setCurrent(link2)} to={'/about'}>About us</AppLink>
-                    </NavbarLink> */}
-            <NavbarLink >
-                <AppLink className={cls.active} to={'/portfolio'}>Portfolio</AppLink>
-            </NavbarLink>
-            <NavbarLink >
-                <AppLink className={cls.active} to={'/contact'}>Contact us</AppLink>
+            <NavbarLink onClick={onClick} >
+                <AppLink className={cls.active} to={'/sizes'}>Sizes</AppLink>
             </NavbarLink>
         </>
     )
