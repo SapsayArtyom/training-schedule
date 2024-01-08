@@ -1,10 +1,7 @@
 import { FC, useCallback, useEffect, useState } from 'react'
 import cls from './SizePage.module.scss'
 import { classNames } from '../../helpers/classNames'
-import Input from '../../components/ui/Input/Input'
 import SizePart from '../../components/sizePart/sizePart'
-import DataPicker from '../../components/dataPicker/DataPicker'
-import { settings } from '../../configs/config'
 import { db } from '../../helpers/firebase'
 import { ref, onValue, set } from "firebase/database";
 import WeightPart from '../../components/sizePart/weightPart'

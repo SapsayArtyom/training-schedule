@@ -17,11 +17,12 @@ interface ExerciseProps {
     week: number
     repeat?: number
     data: any
+    dropp?: string
 }
  
-const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises, day, week, repeat, data, link }) => {
+const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises, day, week, repeat, data, link, dropp }) => {
 
-    const schedule: ISchedule[] = config;
+    const schedule: ISchedule[] = config[settings.programmId - 1];
     const [text, setText] = useState<string>('');
     const [lap, setLap] = useState<number>(0);
 
@@ -45,14 +46,14 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     
     useEffect(() => {
         if (dataExercises) {
-            setText(dataExercises?.weight[week]);
+            setText(dataExercises?.weight?.[week] || '');
             setLap(+dataExercises?.repeat[week] || 0);
         };
     }, [dataExercises, week])
 
     const getRepeatExercise = (name: string): string => {
         const currentIndex = schedule.findIndex(el => el.day === day);
-        let currentData = null
+        let currentData = '0'
         schedule.forEach((el, index) => {
             if (el.day !== day) {
                 const check = el.exercises.find(item => item.name === name);
@@ -66,9 +67,9 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     }
 
     const getExerciseData = (): string => {
-        let currentData = null
+        let currentData = '0'
         currentData = getRepeatExercise(name);
-        if (!currentData) currentData = data[day][name].weight[week - 1];
+        if (!currentData && week !== 0) currentData = data[day][name].weight[week - 1];
         
         return currentData;
     }
@@ -92,8 +93,9 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
                 <div className='flex flex-col flex-1 pr-[20px] max-w-[190px] border-[#672E5A] border-solid border-b-[1px]'>
                     {/* <p className='text-[20px]'>{ name }</p> */}
                     <Link to={link} target='_blank' className='text-[20px]'>{ name }</Link>
-                    <div>
+                    <div className='flex'>
                         <p>{ exercises }</p>
+                        {dropp ? <p className='ml-[5px] text-[#00B4B9] font-bold'>{ dropp }</p> : null}
                     </div>
                 </div>
                 { name !== 'Пресс' ? <div className='flex flex-col pr-[20px] justify-start items-center'>

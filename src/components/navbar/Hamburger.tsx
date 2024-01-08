@@ -6,15 +6,16 @@ import './Hamburger.scss'
 interface HamburgerProps {
     className?: string
     onClick?: () => void
+    isOpen?: boolean
 }
  
-const Hamburger: FC<HamburgerProps> = ({ className, onClick }) => {
+const Hamburger: FC<HamburgerProps> = ({ className, onClick, isOpen }) => {
 
-    const [isOpen, setOpen] = useState<boolean>(false);
+    // const [isOpen, setOpen] = useState<boolean>(false);
     
     const btnHandle = () => {
         onClick();
-        setOpen(!isOpen);
+        // setOpen(!isOpen);
     }
  
     return (

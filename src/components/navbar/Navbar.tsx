@@ -29,7 +29,7 @@ const Navbar: FC<NavbarProps> = ({ className }) => {
                     <div className='md:flex hidden'>
                         <Links onClick={() => openHandler()} />
                     </div>
-                    <Hamburger onClick={() => openHandler()} />
+                    <Hamburger isOpen={isOpen} onClick={() => openHandler()} />
                 </div>
                 {
                     isOpen ? <MobileNavbar onClick={() => openHandler()} /> : null

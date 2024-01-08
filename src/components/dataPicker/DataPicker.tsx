@@ -32,6 +32,7 @@ const DataPicker: FC<DataPickerProps> = ({ className, wrapperClassName, setDate 
 
     return (
         <DatePicker
+            dateFormat="dd/MM/yyyy"
             wrapperClassName={wrapperClassName}
             selected={startDate}
             onChange={(date) => setStartDate(date)}

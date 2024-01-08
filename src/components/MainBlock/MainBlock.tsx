@@ -17,7 +17,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     const [dataExercises, setDataExercises] = useState<any>(null);
     const [dataComments, setDataComments] = useState<any>(null);
 
-    const schedule: ISchedule[] = config;
+    const schedule: ISchedule[] = config[settings.programmId - 1];
     const days = useMemo(() => {
         return schedule.map((el, index) => {
             return {label: el.day, value: index.toString()}
@@ -40,15 +40,14 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         onValue(starCountRef, (snapshot) => {
             const data = snapshot.val();
             setDataExercises(data);
-            // console.log('data ::', data);
         });
         
         const commentRef = ref(db, `/comments/${settings.programmId}`);
         onValue(commentRef, (snapshot) => {
             const data = snapshot.val();
-            setDataComments(data[days[day].label]);
+            if (data) setDataComments(data[days[day].label]);
         });
-    }, [day])    
+    }, [day, settings.programmId])    
 
     useEffect(() => {
         let diff = (settings.startProgramm - Date.now()) / 1000;
@@ -61,11 +60,6 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         
         setWeek(current);
         setDay(currentDay);
-        
-        // const date = '2019-09-29T00:00:00.000Z'
-        // let currentDate = Date.parse(new Date());
-        // let days = (currentDate - Date.parse(date))/86400000;       //86400000 - ms в дне
-        // console.log(Math.round(days))
     }, [])    
 
     const getCurrentDay = (day: number) => {
@@ -103,6 +97,7 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
                 week={week}
                 repeat={+repeat}
                 data={dataExercises}
+                dropp={el.descriptions}
             />
         })
 
