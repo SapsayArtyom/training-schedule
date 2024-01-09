@@ -39,16 +39,12 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
         setLap(count);
         set(ref(db, `/exercises/${settings.programmId}/${day}/${name}/repeat/${week}`), count.toString())
     }
-
-    // useEffect(() => {
-    //     if (dataExercises) setLap(+dataExercises?.repeat[week]);
-    // }, [dataExercises, week])
     
     useEffect(() => {
-        if (dataExercises) {
+        // if (dataExercises) {
             setText(dataExercises?.weight?.[week] || '');
             setLap(+dataExercises?.repeat[week] || 0);
-        };
+        // }
     }, [dataExercises, week])
 
     const getRepeatExercise = (name: string): string => {
@@ -58,7 +54,7 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
             if (el.day !== day) {
                 const check = el.exercises.find(item => item.name === name);
                 if(check) {
-                    currentData = currentIndex < index ? data[el.day][name].weight[week - 1] : data[el.day][name].weight[week]
+                    if (!currentData && week !== 0) currentData = currentIndex < index ? data[el.day][name].weight[week - 1] : data[el.day][name].weight[week]
                 }
             }
         })
@@ -91,7 +87,6 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
         <div className=' px-[25px] py-[20px] border-[#672E5A] border-solid border-b-[1px]'>
             <div className='flex justify-between w-[100%] '>
                 <div className='flex flex-col flex-1 pr-[20px] max-w-[190px] border-[#672E5A] border-solid border-b-[1px]'>
-                    {/* <p className='text-[20px]'>{ name }</p> */}
                     <Link to={link} target='_blank' className='text-[20px]'>{ name }</Link>
                     <div className='flex'>
                         <p>{ exercises }</p>

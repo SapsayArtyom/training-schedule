@@ -6,14 +6,22 @@ import { db } from '../../helpers/firebase'
 import { getDatabase, ref, child, get, onValue, set  } from "firebase/database";
 import TextArea from '../ui/TextArea/TextArea'
 import ProgressBar from '../progressBar/ProgressBar'
+import MainBlockHeader from './MainBlockHeader'
+import { log } from 'console'
  
 interface MainBlockProps {
     className?: string
+}
+
+export interface IDays {
+    label: string
+    value: string
 }
  
 const MainBlock: FC<MainBlockProps> = ({ className }) => {
     const [day, setDay] = useState<number>(0);
     const [week, setWeek] = useState<number>(0);
+    const [id, setId] = useState<number>(1);
     const [dataExercises, setDataExercises] = useState<any>(null);
     const [dataComments, setDataComments] = useState<any>(null);
 
@@ -25,15 +33,17 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }, [schedule])
 
     const weeks = useMemo(() => {
-        // return schedule[0].exercises[0].weeks.map((el, index) => {
-        //     return {label: (index+1).toString(), value: (index).toString()}
-        // })
         let arr = [];
         for (let index = 0; index < settings.durationProgramm; index++) {
             arr.push({label: (index+1).toString(), value: (index).toString()});
         }
         return arr
     }, [schedule])
+
+    const setPorgrammId = (id: number) => {
+        setId(id)
+        settings.programmId = id;
+    }
 
     useEffect(() => {
         const starCountRef = ref(db, `/exercises/${settings.programmId}`);
@@ -45,9 +55,9 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         const commentRef = ref(db, `/comments/${settings.programmId}`);
         onValue(commentRef, (snapshot) => {
             const data = snapshot.val();
-            if (data) setDataComments(data[days[day].label]);
+            setDataComments( data ? data[days[day].label] : '');
         });
-    }, [day, settings.programmId])    
+    }, [day, id])
 
     useEffect(() => {
         let diff = (settings.startProgramm - Date.now()) / 1000;
@@ -82,17 +92,17 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
     }
     
     const getExerciseName = (arr: IDay[]) => {
-        
         let count = 0;
         const arrEx = arr.map((el, index) => {
             const repeat = el.weeks[week].split('')[0];
             count += Number(repeat);
+            
             return <Exercise 
                 key={index}
                 name={el.name}
                 link={el.link}
                 exercises={el.weeks[week]}
-                dataExercises={!!dataExercises ? dataExercises[days[day].label][el.name] : null}
+                dataExercises={!!dataExercises ? dataExercises?.[days[day]?.label]?.[el.name] : null}
                 day={days[day].label}
                 week={week}
                 repeat={+repeat}
@@ -141,21 +151,15 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
 
     return (
         <div className='flex flex-col flex-1 relative w-[100%]'>
-            <div className='flex justify-end fixed top-[100px] bg-[#0a080d] pt-[10px] pb-[10px] w-[100%]'>
-                <Dropdown 
-                    value={day.toString()}
-                    onChange={setDay}
-                    label='Day'
-                    options={days}
-                />
-                <Dropdown 
-                    value={week.toString()}
-                    onChange={setWeek}
-                    label='Week'
-                    options={weeks}
-                    className='px-[30px]'
-                />
-            </div>
+            <MainBlockHeader 
+                day={day.toString()}
+                days={days}
+                week={week.toString()}
+                weeks={weeks}
+                setDay={setDay}
+                setWeek={setWeek}
+                setPorgrammId={setPorgrammId}
+            />
             {
                 getDay(day)
             }

@@ -20,7 +20,7 @@ export interface IProgramm {
 export const settings: IProgramm = {
     programmId: 2,
     programmIds: [1, 2],
-    durationProgramm: 8,
+    durationProgramm: 8,  //weeks
     startProgramm: 1695621600000 //'Mon Sep 25 2023 08:00:00',
     // startProgramm: 1694757600000 //'Mon Sep 15 2023 08:00:00',
 }
