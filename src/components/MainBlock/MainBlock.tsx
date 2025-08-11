@@ -47,14 +47,18 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
 
     useEffect(() => {
         const starCountRef = ref(db, `/exercises/${settings.programmId}`);
+        
         onValue(starCountRef, (snapshot) => {
             const data = snapshot.val();
+            // console.log('settings.programmId', data);
+            // set(ref(db, `/exercises/3`), data);
             setDataExercises(data);
         });
         
         const commentRef = ref(db, `/comments/${settings.programmId}`);
         onValue(commentRef, (snapshot) => {
             const data = snapshot.val();
+            // set(ref(db, `/comments/3`), data);
             setDataComments( data ? data[days[day].label] : '');
         });
     }, [day, id])
