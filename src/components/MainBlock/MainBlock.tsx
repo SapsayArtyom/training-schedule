@@ -51,14 +51,14 @@ const MainBlock: FC<MainBlockProps> = ({ className }) => {
         onValue(starCountRef, (snapshot) => {
             const data = snapshot.val();
             // console.log('settings.programmId', data);
-            // set(ref(db, `/exercises/3`), data);
+            // set(ref(db, `/exercises/4`), data);
             setDataExercises(data);
         });
         
         const commentRef = ref(db, `/comments/${settings.programmId}`);
         onValue(commentRef, (snapshot) => {
             const data = snapshot.val();
-            // set(ref(db, `/comments/3`), data);
+            // set(ref(db, `/comments/2`), data);
             setDataComments( data ? data[days[day].label] : '');
         });
     }, [day, id])
