@@ -65,7 +65,7 @@ const Exercise: FC<ExerciseProps> = ({ className, exercises, name, dataExercises
     const getExerciseData = (): string => {
         let currentData = '0'
         currentData = getRepeatExercise(name);
-        if (!currentData && week !== 0) currentData = data[day][name].weight[week - 1];
+        if (currentData && week !== 0) currentData = data[day][name].weight[week - 1];
         
         return currentData;
     }
